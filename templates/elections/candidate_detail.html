@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ candidate.name }} - Candidate Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-user-tie"></i> Candidate Profile</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img src="{{ candidate.get_photo_url }}" 
+                             alt="{{ candidate.name }}"
+                             class="img-fluid rounded-circle mb-3"
+                             style="width: 200px; height: 200px; object-fit: cover; border: 5px solid #dee2e6;">
+                        <h4>{{ candidate.name }}</h4>
+                        <p class="text-muted">{{ candidate.party }}</p>
+                        <p class="text-muted">Running for: {{ candidate.position.title }}</p>
+                    </div>
+                    <div class="col-md-8">
+                        <h5><i class="fas fa-bullhorn"></i> Manifesto</h5>
+                        <p class="lead">{{ candidate.manifesto }}</p>
+                        
+                        <div class="mt-4">
+                            <h5><i class="fas fa-info-circle"></i> Election Information</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <strong>Position:</strong> {{ candidate.position.title }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Election:</strong> {{ candidate.position.election.title }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Status:</strong> 
+                                    <span class="badge bg-{% if candidate.is_active %}success{% else %}secondary{% endif %}">
+                                        {% if candidate.is_active %}Active{% else %}Inactive{% endif %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{% url 'position_results' candidate.position.election.id %}" class="btn btn-primary">
+                        <i class="fas fa-chart-bar"></i> View Election Results
+                    </a>
+                    <a href="{% url 'election_results' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Elections
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Election Results - Election System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-chart-bar"></i> Election Results</h4>
+            </div>
+            <div class="card-body">
+                {% if elections %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Election Title</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for election in elections %}
+                                <tr>
+                                    <td>{{ election.title }}</td>
+                                    <td>{{ election.start_date|date:"M d, Y" }}</td>
+                                    <td>{{ election.end_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if election.is_active %}success{% else %}secondary{% endif %}">
+                                            {% if election.is_active %}Active{% else %}Completed{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'position_results' election.id %}" class="btn btn-sm btn-primary">
+                                            View Results
+                                        </a>
+                                        {% if user.userprofile.role == 'ADMIN' or user.userprofile.role == 'TALLY_OFFICER' %}
+                                        <a href="{% url 'export_csv' election.id %}" class="btn btn-sm btn-success">
+                                            CSV
+                                        </a>
+                                        <a href="{% url 'export_pdf' election.id %}" class="btn btn-sm btn-danger">
+                                            PDF
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <h4>No Elections Found</h4>
+                        <p class="text-muted">There are no elections available for viewing.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

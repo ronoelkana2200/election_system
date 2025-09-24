@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Results Dashboard - Election System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="fas fa-chart-bar"></i> Election Results Dashboard</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card text-white bg-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-vote-yea fa-3x mb-3"></i>
+                                <h3>{{ elections.count }}</h3>
+                                <p class="mb-0">Total Elections</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="card text-white bg-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-check-circle fa-3x mb-3"></i>
+                                <h3>{{ elections|length }}</h3>
+                                <p class="mb-0">Completed Elections</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="card text-white bg-warning">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-3x mb-3"></i>
+                                <h3>0</h3>
+                                <p class="mb-0">Total Voters</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{% url 'election_results' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-list"></i> View All Election Results
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Elections -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-history"></i> Recent Elections</h5>
+            </div>
+            <div class="card-body">
+                {% if elections %}
+                    <div class="list-group">
+                        {% for election in elections %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ election.title }}</h6>
+                                <small>{{ election.end_date|date:"M d, Y" }}</small>
+                            </div>
+                            <p class="mb-1">{{ election.description|truncatewords:20 }}</p>
+                            <div class="mt-2">
+                                <a href="{% url 'position_results' election.id %}" class="btn btn-sm btn-outline-primary">
+                                    View Results
+                                </a>
+                                {% if user.userprofile.role == 'ADMIN' or user.userprofile.role == 'TALLY_OFFICER' %}
+                                <a href="{% url 'export_csv' election.id %}" class="btn btn-sm btn-outline-success">
+                                    Export CSV
+                                </a>
+                                <a href="{% url 'export_pdf' election.id %}" class="btn btn-sm btn-outline-danger">
+                                    Export PDF
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center py-4">No elections found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
