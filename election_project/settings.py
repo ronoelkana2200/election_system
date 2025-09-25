@@ -79,9 +79,13 @@ WSGI_APPLICATION = 'election_project.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "election_system",
+        "USER": "election_system_user",
+        "PASSWORD": "TtnV9nMEWV1MID6Y8rFAB7XRksi5uLLb",
+        "HOST": "dpg-d3a8jb15pdvs73clq12g-a.oregon-postgres.render.com",
+        "PORT": "5432",
     }
 }
 
